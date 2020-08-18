@@ -1,0 +1,51 @@
+name: 'Push AWS ECR'
+description: 'Push Docker image to AWS ECR'
+author: 'hands-lab'
+inputs:
+  image:
+    description: 'image name'
+    required: true
+  dockerfile-path:
+    description: 'Dockerfile path'
+    required: false
+    default: '.'
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  aws-region:
+    description: 'AWS Region'
+    required: true
+  aws-account-id:
+    description: 'AWS Account ID'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Build image
+      id: build-image
+      run: |
+        IMAGE="${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.image }}"
+        docker build -t "$IMAGE" ${{ inputs.dockerfile-path }}
+        echo "::set-output name=image::$IMAGE"
+      shell: bash
+      env:
+        DOCKER_BUILDKIT: '1'
+
+    - name: Loging AWS ECR
+      run: $(aws ecr get-login --no-include-email)
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+        AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
+
+    - name: Push image to AWS ECR
+      run: docker push ${{ steps.build-image.outputs.image }}
+      shell: bash
+
+branding:
+  icon: 'cloud'
+  color: 'orange'
