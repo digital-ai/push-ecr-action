@@ -1,5 +1,7 @@
 # Push ECR Action
 
+![GitHub](https://img.shields.io/github/license/hands-lab/push-ecr-action)
+
 Push Docker or OCI image to AWS ECR
 
 <!-- TOC depthFrom:2 -->
