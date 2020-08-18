@@ -24,16 +24,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Build image
-      id: build-image
-      run: |
-        IMAGE="${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.image }}"
-        docker build -t "$IMAGE" ${{ inputs.dockerfile-path }}
-        echo "::set-output name=image::$IMAGE"
-      shell: bash
-      env:
-        DOCKER_BUILDKIT: '1'
-
     - name: Loging AWS ECR
       run: $(aws ecr get-login --no-include-email)
       shell: bash
@@ -42,8 +32,16 @@ runs:
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
 
+    - name: Change image tag
+      id: change-image
+      run: |
+        IMAGE="${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.image }}"
+        docker tag ${{ inputs.image }} "$IMAGE"
+        echo "::set-output name=image::$IMAGE"
+      shell: bash
+
     - name: Push image to AWS ECR
-      run: docker push ${{ steps.build-image.outputs.image }}
+      run: docker push ${{ steps.change-image.outputs.image }}
       shell: bash
 
 branding:

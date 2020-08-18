@@ -14,9 +14,9 @@ Push Docker or OCI image to AWS ECR
 
 ## Feature
 
-- Build image
-  - DOCKER_BUILDKIT is enabled
 - Login AWS ECR
+- Change image tag
+  - Add AWS ECR registry to the beginning of the image name
 - Push Docker or OCI image
 
 ## Usage
