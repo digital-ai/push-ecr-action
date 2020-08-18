@@ -5,10 +5,6 @@ inputs:
   image:
     description: 'image name'
     required: true
-  dockerfile-path:
-    description: 'Dockerfile path'
-    required: false
-    default: '.'
   aws-access-key-id:
     description: 'AWS Access Key ID'
     required: true

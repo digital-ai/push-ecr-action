@@ -37,7 +37,6 @@ steps:
 |Name|Type|Required|Default|Description|
 |:--:|:--:|:--:|:--:|:--|
 |image|string|true||image name|
-|dockerfile-path|string|false|'.'|Dockerfile PATH|
 |aws-access-key-id|string|true||AWS Access Key ID|
 |aws-secret-access-key|string|true||AWS Secret Access Key|
 |aws-region|string|true||AWS Region|
