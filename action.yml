@@ -21,7 +21,10 @@ runs:
   using: 'composite'
   steps:
     - name: Loging AWS ECR
-      run: $(aws ecr get-login --no-include-email)
+      run: |
+        aws ecr get-login-password \
+        | docker login --username AWS --password-stdin \
+            ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com
       shell: bash
       env:
         AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
