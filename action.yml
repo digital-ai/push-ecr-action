@@ -5,6 +5,9 @@ inputs:
   image:
     description: 'image name'
     required: true
+  base:
+    description: 'base image'
+    required: true
   aws-access-key-id:
     description: 'AWS Access Key ID'
     required: true
@@ -35,7 +38,7 @@ runs:
       id: change-image
       run: |
         IMAGE="${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.image }}"
-        docker tag ${{ inputs.image }} "$IMAGE"
+        docker tag ${{ inputs.base }} "$IMAGE"
         echo "::set-output name=image::$IMAGE"
       shell: bash
 
